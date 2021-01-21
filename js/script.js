@@ -20,22 +20,6 @@ const searchButton = searchInput.nextElementSibling;
 
 //Functions
 
-   //The execute search function utilizes a loop and conditional statement to locate students by searching their name
-
-const executeSearch = (input) => {
-   const filterList = [];
-   for (i = 0; i < data.length; i++) {
-      let firstName = data[i].name.first.toUpperCase();
-      let lastName = data[i].name.last.toUpperCase();
-      let fullName = `${firstName} ${lastName}`;
-      if (firstName.includes(input.toUpperCase()) || lastName.includes(input.toUpperCase()) || fullName.includes(input.toUpperCase())) {
-         filterList.push(data[i]);
-      }
-   }
-   showPage(filterList, 1);
-   addPagination(filterList);
-}
-
    // The showPage function inserts html into the page to display the student information
 
 const showPage = (list, page) => {
@@ -79,6 +63,22 @@ const addPagination = (list) => {
       document.querySelector('button').className = 'active';
    };
 }
+
+   //The execute search function utilizes a loop and conditional statement to locate students by searching their name
+
+   const executeSearch = (input) => {
+      const filterList = [];
+      for (i = 0; i < data.length; i++) {
+         let firstName = data[i].name.first.toUpperCase();
+         let lastName = data[i].name.last.toUpperCase();
+         let fullName = `${firstName} ${lastName}`;
+         if (firstName.includes(input.toUpperCase()) || lastName.includes(input.toUpperCase()) || fullName.includes(input.toUpperCase())) {
+            filterList.push(data[i]);
+         }
+      }
+      showPage(filterList, 1);
+      addPagination(filterList);
+   }
 
 // Event Listeners
 
