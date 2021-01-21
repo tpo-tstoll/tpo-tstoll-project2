@@ -3,22 +3,49 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
+// Global Variables
+
 const itemsPerPage = 9;
 const linkList = document.getElementsByClassName('link-list')[0];
+const headline = document.getElementsByTagName('h2')[0];
+const search = `
+   <label for="search" class="student-search">
+   <input id="search" placeholder="Search by name...">
+   <button type="button" class="search-button"><img src="img/icn-search.svg" alt="Search icon"></button>
+   </label>`;
+headline.insertAdjacentHTML('afterend', search);
+const searchInput = document.getElementById('search');
+const searchButton = searchInput.nextElementSibling;
 
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
+
+//Functions
+
+   //The execute search function utilizes a loop and conditional statement to locate students by searching their name
+
+const executeSearch = (input) => {
+   const filterList = [];
+   for (i = 0; i < data.length; i++) {
+      let firstName = data[i].name.first.toUpperCase();
+      let lastName = data[i].name.last.toUpperCase();
+      let fullName = `${firstName} ${lastName}`;
+      if (firstName.includes(input.toUpperCase()) || lastName.includes(input.toUpperCase()) || fullName.includes(input.toUpperCase())) {
+         filterList.push(data[i]);
+      }
+   }
+   showPage(filterList, 1);
+   addPagination(filterList);
+}
+
+   // The showPage function inserts html into the page to display the student information
 
 const showPage = (list, page) => {
    const startIndex = (page * itemsPerPage) - itemsPerPage;
    const endIndex = page * itemsPerPage;
-   let studentList = document.getElementsByClassName('student-list')[0];
+   const studentList = document.getElementsByClassName('student-list')[0];
    studentList.innerHTML = '';
    for (i = 0; i < list.length; i++) {
       if (i >= startIndex && i < endIndex) {
-        const li = `
+         const li = `
          <li class="student-item cf">
             <div class="student-details">
                <img class="avatar" src=${list[i].picture.medium} alt="Profile Picture">
@@ -30,14 +57,15 @@ const showPage = (list, page) => {
             </div>
          </li>`;
          studentList.insertAdjacentHTML('beforeend', li);
-      };
+      } 
+   };
+   if (list.length === 0) {
+      studentList.innerHTML = `<h1>No results found</h1>`;
    };
 }
 
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
+
+   //The addPagination fucntion dynamically adds page numbers to page
 
 const addPagination = (list) => {
    const numOfPages = Math.ceil(list.length/itemsPerPage);
@@ -52,6 +80,26 @@ const addPagination = (list) => {
    };
 }
 
+// Event Listeners
+
+   //The searchButton listener is submitted by clicking the searchbox icon and calls the executeSearch function
+
+searchButton.addEventListener('click', (e) => {
+   e.preventDefault();
+   if (searchButton.className === 'search-button')
+      executeSearch(searchInput.value);
+});
+
+   //The searchInput listener is submitted by typing into the searchbox and calls the executeSearch function
+
+searchInput.addEventListener('keyup', (e) => {
+   e.preventDefault();
+   if (searchInput.tagName === 'INPUT')
+   executeSearch(searchInput.value);
+});
+
+   //The linklList listener changes the page by clicking a button and changes the class of the clicked button to active.
+
 linkList.addEventListener('click', (e) => {
    e.preventDefault();
    const boxClicked = e.target;
@@ -62,6 +110,7 @@ linkList.addEventListener('click', (e) => {
    };
 });
 
+//calling functions
 
 showPage(data,1);
 addPagination(data);
