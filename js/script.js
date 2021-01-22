@@ -49,7 +49,9 @@ const showPage = (list, page) => {
 }
 
 
-   //The addPagination fucntion dynamically adds page numbers to page
+   /* The addPagination fucntion dynamically adds page numbers to page.
+      Then the linklList listener changes the page by clicking a button
+      and changes the class of the clicked button to active. */
 
 const addPagination = (list) => {
    const numOfPages = Math.ceil(list.length/itemsPerPage);
@@ -60,7 +62,16 @@ const addPagination = (list) => {
          <button type="button">${i}</button>
       </li>`;
       linkList.insertAdjacentHTML('beforeend', button);
-      document.querySelector('button').className = 'active';
+      document.querySelector('li button').className = 'active';
+      linkList.addEventListener('click', (e) => {
+         e.preventDefault();
+         const boxClicked = e.target;
+         if (boxClicked.tagName === 'BUTTON') {
+            document.querySelector('.active').className = '';
+            boxClicked.className = 'active';
+            showPage(list, boxClicked.textContent);
+         };
+      });
    };
 }
 
@@ -80,7 +91,7 @@ const addPagination = (list) => {
       addPagination(filterList);
    }
 
-// Event Listeners
+// Search Event Listeners
 
    //The searchButton listener is submitted by clicking the searchbox icon and calls the executeSearch function
 
@@ -98,17 +109,6 @@ searchInput.addEventListener('keyup', (e) => {
    executeSearch(searchInput.value);
 });
 
-   //The linklList listener changes the page by clicking a button and changes the class of the clicked button to active.
-
-linkList.addEventListener('click', (e) => {
-   e.preventDefault();
-   const boxClicked = e.target;
-   if (boxClicked.tagName === 'BUTTON') {
-      document.querySelector('.active').className = '';
-      boxClicked.className = 'active';
-      showPage(data, boxClicked.textContent);
-   };
-});
 
 //calling functions
 
